@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class UserCmcController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      */
@@ -38,7 +37,6 @@ class UserCmcController extends Controller
         $opportunities = $opportunities->get();
         return view('all', compact('opportunities'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -46,7 +44,6 @@ class UserCmcController extends Controller
     {
         return view('add-par');
     }
-
     /**
      * Store a newly created resource in storage.
      */
