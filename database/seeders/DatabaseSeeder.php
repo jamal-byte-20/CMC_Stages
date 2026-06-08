@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         );
 
         // create secteur and type without factory
-        $secteur = new Secteur();j
+        $secteur = new Secteur();
         $secteur->title = 'IT';
         $secteur->save();
 

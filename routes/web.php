@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserCmcController;
-use App\Http\Controllers\Auth\MultiRegisterController;
 use App\Http\Controllers\OpportunityController;
 use App\Http\Controllers\PartenaireController;
 
