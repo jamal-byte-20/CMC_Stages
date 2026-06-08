@@ -124,18 +124,19 @@
                                 </div>
                             </a>
 
-                            <!-- Consulter les Routes -->
-                            <a href="{{ route('routes.index') }}" class="group p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all flex flex-col justify-between gap-4 sm:col-span-2">
+                            <!-- Consulter les opportunités -->
+                            <a href="{{ route('opportunities.index') }}" class="group p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all flex flex-col justify-between gap-4">
                                 <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-105 transition-transform">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
                                     </svg>
                                 </div>
                                 <div>
-                                    <h5 class="font-bold text-slate-950 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ __('Liste des Routes Application') }}</h5>
-                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ __('Outil technique pour auditer l\'ensemble des routes enregistrées dans la plateforme.') }}</p>
+                                    <h5 class="font-bold text-slate-950 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ __('Toutes les opportunités') }}</h5>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ __('Consultez et filtrez toutes les offres publiées par les partenaires.') }}</p>
                                 </div>
                             </a>
+
                         @elseif(Auth::user()->isPartenaire())
                             <!-- Gérer vos opportunités -->
                             <a href="{{ route('opportunities.index') }}" class="group p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700/50 hover:border-indigo-500 dark:hover:border-indigo-500 transition-all flex flex-col justify-between gap-4">
