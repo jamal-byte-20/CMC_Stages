@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class UserCmcController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
@@ -61,4 +62,5 @@ class UserCmcController extends Controller
     {
         //
     }
+
 }

@@ -29,4 +29,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function userCmc(){
+        return $this->hasOne(UserCmc::class);
+    }
+
+    public function partenaire(){
+        return $this->hasOne(Partenaire::class);
+    }
 }

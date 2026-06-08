@@ -14,7 +14,7 @@ Route::get('/home', function () {
 });
 
 Route::resource('UserCmc', UserCmcController::class);
-Route::resource('UserPartenaires', PartenairesController::class);
+Route::resource('UserPartenaires', PartenaireController::class);
 
 Route::get('/register/cmc', [MultiRegisterController::class, 'showCmcForm'])->name('register.cmc');
 Route::post('/register/cmc', [MultiRegisterController::class, 'registerCmc']);
