@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Opportunity;
+use App\Models\Secteur;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class OpportunityController extends Controller
