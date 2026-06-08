@@ -9,71 +9,66 @@ use Illuminate\Http\Request;
 
 class OpportunityController extends Controller
 {
+    protected function validateOpportunity(Request $request): array
+    {
+        return $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'secteur' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
+            'niveau' => 'nullable|string|max:255',
+            'profil_requis' => 'nullable|string|max:1000',
+            'ville' => 'nullable|string|max:255',
+        ]);
+    }
+
     public function index()
     {
-        $opportunities = Opportunity::with(['secteur', 'type'])->get();
-        return view('opportunities.index', compact('opportunities'));
+        $partenaire = auth()->user()->partenaire;
+
+        return view('opportunities.index', [
+            'opportunities' => $partenaire?->opportunities()->latest()->get() ?? collect(),
+        ]);
     }
 
     public function create()
     {
-        $secteurs = Secteur::all();
-        $types = Type::all();
-
-        return view('opportunities.create', compact('secteurs', 'types'));
+        return view('opportunities.create');
     }
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'secteur_id' => 'required|integer|exists:secteurs,id',
-            'type_id' => 'required|integer|exists:types,id',
-            'ville' => 'required|string|max:255',
-        ]);
+        $partenaire = auth()->user()->partenaire;
 
-        Opportunity::create($validatedData);
+        abort_unless($partenaire, 403);
 
-        return redirect()->route('opportunities.index')
-                         ->with('success', 'Opportunity added successfully!');
-    }
+        $partenaire->opportunities()->create($this->validateOpportunity($request));
 
-    public function show(Opportunity $opportunity)
-    {
-        $opportunity->load(['secteur', 'type']);
-        return view('opportunities.show', compact('opportunity'));
+        return redirect()->route('opportunities.index')->with('status', 'Opportunité créée.');
     }
 
     public function edit(Opportunity $opportunity)
     {
-        $secteurs = Secteur::all();
-        $types = Type::all();
+        abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
 
-        return view('opportunities.edit', compact('opportunity', 'secteurs', 'types'));
+        return view('opportunities.edit', ['opportunity' => $opportunity]);
     }
 
     public function update(Request $request, Opportunity $opportunity)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:1000',
-            'secteur_id' => 'required|integer|exists:secteurs,id',
-            'type_id' => 'required|integer|exists:types,id',
-            'ville' => 'required|string|max:255',
-        ]);
+        abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
 
-        $opportunity->update($validatedData);
+        $opportunity->update($this->validateOpportunity($request));
 
-        return redirect()->route('opportunities.index')
-                         ->with('success', 'Opportunity updated successfully!');
+        return redirect()->route('opportunities.index')->with('status', 'Opportunité mise à jour.');
     }
 
     public function destroy(Opportunity $opportunity)
     {
+        abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
+
         $opportunity->delete();
 
-        return redirect()->route('opportunities.index')
-                         ->with('success', 'Opportunity deleted successfully!');
+        return redirect()->route('opportunities.index')->with('status', 'Opportunité supprimée.');
     }
 }

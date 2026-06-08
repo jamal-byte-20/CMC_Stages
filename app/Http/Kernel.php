@@ -1,0 +1,1 @@
+'cmc' => \App\Http\Middleware\EnsureUserIsCmc::class,

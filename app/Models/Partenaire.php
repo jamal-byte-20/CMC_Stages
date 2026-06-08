@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Opportunity;
+use App\Models\User;
+
 class Partenaire extends Model
 {
     protected $fillable = [
@@ -11,10 +14,17 @@ class Partenaire extends Model
         'phone',
         'email',
         'address',
-        'city'
+        'city',
+        'user_id',
     ];
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
+    }
+
+    public function opportunities()
+    {
+        return $this->hasMany(Opportunity::class);
     }
 }

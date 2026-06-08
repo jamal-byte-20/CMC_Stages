@@ -14,6 +14,7 @@ class Opportunity extends Model
         'niveau',
         'profil_requis',
         'ville',
+        'partenaire_id',
     ];
 
     public function secteur()
@@ -24,5 +25,10 @@ class Opportunity extends Model
     public function type()
     {
         return $this->belongsTo(Type::class);
+    }
+
+    public function partenaire()
+    {
+        return $this->belongsTo(Partenaire::class);
     }
 }
