@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Type extends Model
 {
-    //
+    protected $fillable = [
+        'title',
+    ];
+
+    public function opportunities()
+    {
+        return $this->hasMany(Opportunity::class);
+    }
 }

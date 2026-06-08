@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('opportunities', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description')->nullable();
+            $table->string('secteur')->nullable();
+            $table->string('type')->nullable();
+            $table->string('niveau')->nullable();
+            $table->string('profil_requis')->nullable();
+            $table->string('ville')->nullable();
+            foreignId('secteur_id')->nullable()->constrained('secteurs')->onDelete('set null');
+            foreignId('type_id')->nullable()->constrained('types')->onDelete('set null');
             $table->timestamps();
         });
     }
