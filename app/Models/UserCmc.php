@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserCmc extends Model
 {
     protected $fillable = [
+        'user_id',
         'post',
     ];
     public function user(){
