@@ -7,10 +7,7 @@ use App\Http\Controllers\Auth\PartenairesController;
 Route::get('/', function () {
     return view('welcome');
 });
-// hhhhh
-Route::get('/home', function () {
-    return view('home');
-});
+
 
 Route::resource('UserCmc', UserCmcController::class);
 
