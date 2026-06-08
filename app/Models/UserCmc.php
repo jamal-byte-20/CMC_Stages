@@ -8,8 +8,11 @@ class UserCmc extends Model
 {
     protected $fillable = [
         'post',
+        'user_id',
     ];
-    public function user(){
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

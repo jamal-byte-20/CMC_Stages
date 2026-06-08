@@ -1,26 +1,46 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OpportunityController;
+use App\Http\Controllers\PartenaireController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RouteListController;
 use App\Http\Controllers\UserCmcController;
-use App\Http\Controllers\Auth\MultiRegisterController;
-use App\Http\Controllers\Auth\PartenairesController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
-// hhhhh
-Route::get('/home', function () {
-    return view('home');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
-Route::resource('UserCmc', UserCmcController::class);
-Route::resource('UserPartenaires', PartenaireController::class);
+Route::middleware(['auth', 'cmc'])->group(function () {
+    Route::resource('partenaires', PartenaireController::class)->only([
+        'index', 'create', 'store', 'edit', 'update', 'destroy',
+    ]);
+});
 
-Route::get('/register/cmc', [MultiRegisterController::class, 'showCmcForm'])->name('register.cmc');
-Route::post('/register/cmc', [MultiRegisterController::class, 'registerCmc']);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('user-cmcs', UserCmcController::class)->only([
+        'index', 'create', 'store', 'edit', 'update', 'destroy',
+    ]);
+    Route::get('/routes', [RouteListController::class, 'index'])->name('routes.index');
+});
 
-Route::get('/register/partner', [MultiRegisterController::class, 'showPartnerForm'])->name('register.partner');
-Route::post('/register/partner', [MultiRegisterController::class, 'registerPartner']);
+Route::middleware(['auth', 'partenaire'])->group(function () {
+    Route::resource('opportunities', OpportunityController::class)->only([
+        'index', 'create', 'store', 'edit', 'update', 'destroy',
+    ]);
+});
 
-
-
+require __DIR__.'/auth.php';

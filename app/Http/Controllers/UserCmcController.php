@@ -2,65 +2,75 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserCmc;
 use Illuminate\Http\Request;
 
 class UserCmcController extends Controller
 {
-
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $userCmc = auth()->user()->userCmc;
+
+        return view('user-cmcs.index', [
+            'userCmcs' => $userCmc ? collect([$userCmc]) : collect(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        if (auth()->user()->userCmc) {
+            return redirect()->route('user-cmcs.index');
+        }
+
+        return view('user-cmcs.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $user = auth()->user();
+
+        if ($user->userCmc) {
+            return redirect()->route('user-cmcs.index')->with('status', 'Vous avez déjà un profil CMC.');
+        }
+
+        $user->userCmc()->create($request->validate([
+            'post' => 'required|string|max:255',
+        ]));
+
+        return redirect()->route('user-cmcs.index')->with('status', 'Profil CMC créé.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(UserCmc $userCmc)
     {
-        //
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
+
+        return view('user-cmcs.show', ['userCmc' => $userCmc]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(UserCmc $userCmc)
     {
-        //
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
+
+        return view('user-cmcs.edit', ['userCmc' => $userCmc]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(Request $request, UserCmc $userCmc)
     {
-        //
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
+
+        $userCmc->update($request->validate([
+            'post' => 'required|string|max:255',
+        ]));
+
+        return redirect()->route('user-cmcs.index')->with('status', 'Profil CMC mis à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(UserCmc $userCmc)
     {
-        //
-    }
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
 
+        $userCmc->delete();
+
+        return redirect()->route('user-cmcs.index')->with('status', 'Profil CMC supprimé.');
+    }
 }

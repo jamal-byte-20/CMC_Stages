@@ -7,59 +7,66 @@ use Illuminate\Http\Request;
 
 class OpportunityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected function validateOpportunity(Request $request): array
+    {
+        return $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'secteur' => 'nullable|string|max:255',
+            'type' => 'nullable|string|max:255',
+            'niveau' => 'nullable|string|max:255',
+            'profil_requis' => 'nullable|string|max:1000',
+            'ville' => 'nullable|string|max:255',
+        ]);
+    }
+
     public function index()
     {
-        //
+        $partenaire = auth()->user()->partenaire;
+
+        return view('opportunities.index', [
+            'opportunities' => $partenaire?->opportunities()->latest()->get() ?? collect(),
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('opportunities.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $partenaire = auth()->user()->partenaire;
+
+        abort_unless($partenaire, 403);
+
+        $partenaire->opportunities()->create($this->validateOpportunity($request));
+
+        return redirect()->route('opportunities.index')->with('status', 'Opportunité créée.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Opportunity $opportunity)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Opportunity $opportunity)
     {
-        //
+        abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
+
+        return view('opportunities.edit', ['opportunity' => $opportunity]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Opportunity $opportunity)
     {
-        //
+        abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
+
+        $opportunity->update($this->validateOpportunity($request));
+
+        return redirect()->route('opportunities.index')->with('status', 'Opportunité mise à jour.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Opportunity $opportunity)
     {
-        //
+        abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
+
+        $opportunity->delete();
+
+        return redirect()->route('opportunities.index')->with('status', 'Opportunité supprimée.');
     }
 }
