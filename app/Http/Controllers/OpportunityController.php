@@ -20,17 +20,33 @@ class OpportunityController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $partenaire = auth()->user()->partenaire;
+        $user = auth()->user();
+
+        $query = Opportunity::visibleTo($user)->latest();
+
+        if ($request->filled('title')) {
+            $query->where('title', 'like', '%' . $request->input('title') . '%');
+        }
+        if ($request->filled('secteur')) {
+            $query->where('secteur', 'like', '%' . $request->input('secteur') . '%');
+        }
+        if ($request->filled('type')) {
+            $query->where('type', 'like', '%' . $request->input('type') . '%');
+        }
 
         return view('opportunities.index', [
-            'opportunities' => $partenaire?->opportunities()->latest()->get() ?? collect(),
+            'opportunities' => $query->get(),
+            'filters' => $request->only(['title', 'secteur', 'type']),
+            'isCmc' => $user->isCmc(),
         ]);
     }
 
     public function create()
     {
+        abort_unless(auth()->user()->isPartenaire(), 403);
+
         return view('opportunities.create');
     }
 

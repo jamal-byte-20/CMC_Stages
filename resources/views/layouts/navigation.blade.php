@@ -26,14 +26,14 @@
                     @endif
                     
                     @if (Auth::user()->isCmc())
+                        <x-nav-link :href="route('opportunities.index')" :active="request()->routeIs('opportunities.*')">
+                            {{ __('Opportunités') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('partenaires.index')" :active="request()->routeIs('partenaires.*')">
                             {{ __('Partenaires') }}
                         </x-nav-link>
                         <x-nav-link :href="route('user-cmcs.index')" :active="request()->routeIs('user-cmcs.*')">
                             {{ __('Profils CMC') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('routes.index')" :active="request()->routeIs('routes.*')">
-                            {{ __('Liste des Routes') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -99,14 +99,14 @@
             @endif
             
             @if (Auth::user()->isCmc())
+                <x-responsive-nav-link :href="route('opportunities.index')" :active="request()->routeIs('opportunities.*')">
+                    {{ __('Opportunités') }}
+                </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('partenaires.index')" :active="request()->routeIs('partenaires.*')">
                     {{ __('Partenaires') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('user-cmcs.index')" :active="request()->routeIs('user-cmcs.*')">
                     {{ __('Profils CMC') }}
-                </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('routes.index')" :active="request()->routeIs('routes.*')">
-                    {{ __('Liste des Routes') }}
                 </x-responsive-nav-link>
             @endif
         </div>

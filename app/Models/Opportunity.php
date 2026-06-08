@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Opportunity extends Model
 {
@@ -30,5 +31,16 @@ class Opportunity extends Model
     public function partenaire()
     {
         return $this->belongsTo(Partenaire::class);
+    }
+
+    public function scopeVisibleTo($query, User $user)
+    {
+        $query->with('partenaire.user');
+
+        if ($user->isCmc()) {
+            return $query;
+        }
+
+        return $query->where('partenaire_id', $user->partenaire?->id ?? 0);
     }
 }

@@ -28,11 +28,7 @@
                 </div>
             </div>
 
-            <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600 dark:text-slate-300">
-                <a href="#" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Accueil</a>
-                <a href="#opportunites" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Opportunités</a>
-                <a href="#partenaires" class="hover:text-teal-600 dark:hover:text-teal-400 transition-colors">Partenaires</a>
-            </nav>
+
 
             <div class="flex items-center gap-3">
                 @if (Route::has('login'))
