@@ -3,63 +3,77 @@
 namespace App\Http\Controllers;
 
 use App\Models\Opportunity;
+use App\Models\Secteur;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class OpportunityController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $opportunities = Opportunity::with(['secteur', 'type'])->get();
+        return view('opportunities.index', compact('opportunities'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $secteurs = Secteur::all();
+        $types = Type::all();
+
+        return view('opportunities.create', compact('secteurs', 'types'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'secteur_id' => 'required|integer|exists:secteurs,id',
+            'type_id' => 'required|integer|exists:types,id',
+            'ville' => 'required|string|max:255',
+        ]);
+
+        Opportunity::create($validatedData);
+
+        return redirect()->route('opportunities.index')
+                         ->with('success', 'Opportunity added successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Opportunity $opportunity)
     {
-        //
+        $opportunity->load(['secteur', 'type']);
+        return view('opportunities.show', compact('opportunity'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Opportunity $opportunity)
     {
-        //
+        $secteurs = Secteur::all();
+        $types = Type::all();
+
+        return view('opportunities.edit', compact('opportunity', 'secteurs', 'types'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Opportunity $opportunity)
     {
-        //
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'secteur_id' => 'required|integer|exists:secteurs,id',
+            'type_id' => 'required|integer|exists:types,id',
+            'ville' => 'required|string|max:255',
+        ]);
+
+        $opportunity->update($validatedData);
+
+        return redirect()->route('opportunities.index')
+                         ->with('success', 'Opportunity updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Opportunity $opportunity)
     {
-        //
+        $opportunity->delete();
+
+        return redirect()->route('opportunities.index')
+                         ->with('success', 'Opportunity deleted successfully!');
     }
 }
