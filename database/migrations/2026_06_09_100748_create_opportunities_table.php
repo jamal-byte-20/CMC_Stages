@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('opportunities', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->foreignIdFor(Partenaire::class)->constrained()->cascadeOnDelete();
+            $table->string('title');
             $table->text('description')->nullable();
             $table->string('niveau')->nullable();
             $table->string('profil_requis')->nullable();

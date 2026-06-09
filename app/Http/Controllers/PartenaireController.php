@@ -1,34 +1,95 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Partenaire;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-
-
 use Illuminate\Http\Request;
 
 class PartenaireController extends Controller
 {
-    public function showPartnerForm()
+    public function index()
     {
-        return view('register-partner');
+        $partenaires = User::whereHas('partenaire')->with('partenaire')->get();
+
+        return view('partenaires.index', [
+            'partenaires' => $partenaires,
+        ]);
     }
 
-    public function registerPartner(Request $request)
+    public function create()
     {
-        $request->validate([
+        return view('partenaires.create');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email', 
-            'password' => 'required|string|min:8|confirmed', 
-        ], [
-            'email.unique' => 'Cet email est déjà utilisé.',
-            'password.confirmed' => 'Les deux mots de passe ne correspondent pas.',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:8',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
         ]);
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
+
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
         ]);
-        return redirect()->route('login')->with('success', 'Compte Partenaire créé avec succès !');
+
+        $user->partenaire()->create([
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'city' => $data['city'] ?? null,
+        ]);
+
+        return redirect()->route('partenaires.index')->with('status', 'Partenaire créé avec succès.');
+    }
+
+    public function edit(Partenaire $partenaire)
+    {
+        return view('partenaires.edit', [
+            'partenaire' => $partenaire,
+        ]);
+    }
+
+    public function update(Request $request, Partenaire $partenaire)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $partenaire->user->id,
+            'password' => 'nullable|string|min:8',
+            'phone' => 'nullable|string|max:50',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:255',
+        ]);
+
+        $userData = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+        ];
+
+        if (!empty($data['password'])) {
+            $userData['password'] = bcrypt($data['password']);
+        }
+
+        $partenaire->user->update($userData);
+
+        $partenaire->update([
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'city' => $data['city'] ?? null,
+        ]);
+
+        return redirect()->route('partenaires.index')->with('status', 'Partenaire mis à jour.');
+    }
+
+    public function destroy(Partenaire $partenaire)
+    {
+        $partenaire->user->delete();
+
+        return redirect()->route('partenaires.index')->with('status', 'Partenaire supprimé.');
     }
 }
