@@ -19,27 +19,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()->create();
+        // $user = User::factory()->create();
 
-        // Create a test partenaire
-        $partenaire = Partenaire::factory()->create(
-            [
-                'user_id' => $user->id,
-            ]
-        );
+        // // Create a test partenaire
+        // $partenaire = Partenaire::factory()->create(
+        //     [
+        //         'user_id' => $user->id,
+        //     ]
+        // );
 
-        // create secteur and type without factory
-        $secteur = new Secteur();j
-        $secteur->title = 'IT';
-        $secteur->save();
+        // // create secteur and type without factory
+        // $secteur = new Secteur();
+        // $secteur->title = 'IT';
+        // $secteur->save();
 
-        $type = new Type();
-        $type->title = 'Full-time';
-        $type->save();
+        // $type = new Type();
+        // $type->title = 'Full-time';
+        // $type->save();
 
-        // Create test opportunities
-        Opportunity::factory(5)->create([
-            'partenaire_id' => $partenaire->id,
-        ]);
+        // // Create test opportunities
+        // Opportunity::factory(5)->create([
+        //     'partenaire_id' => $partenaire->id,
+        // ]);
+
+        // create 5 Type and secteur
+        for ($i = 1; $i <= 5; $i++) {
+            $secteur = new Secteur();
+            $secteur->title = 'Secteur ' . $i;
+            $secteur->save();
+
+            $type = new Type();
+            $type->title = 'Type ' . $i;
+            $type->save();
+        }
     }
 }

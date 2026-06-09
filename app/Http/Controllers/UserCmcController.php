@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\UserCmc;
 use Illuminate\Http\Request;
 
 class UserCmcController extends Controller
@@ -11,27 +12,28 @@ class UserCmcController extends Controller
      */
     public function index()
     {
-        $city = request('city');
-        $type = request('type');
-        $secteur = request('secteur');
-        $date = request('date');
+        $userCmc = auth()->user()->userCmc;
 
-        $opportunities = Opportunity::query();
+        return view('user-cmcs.index', [
+            'userCmcs' => $userCmc ? collect([$userCmc]) : collect(),
+        ]);
+    }
 
-        if ($city) {
-            $opportunities->where('city', 'like', "%$city%");
+    public function create()
+    {
+        if (auth()->user()->userCmc) {
+            return redirect()->route('user-cmcs.index');
         }
 
-        if ($type) {
-            $opportunities->where('type', 'like', "%$type%");
-        }
+        return view('user-cmcs.create');
+    }
 
-        if ($secteur) {
-            $opportunities->where('secteur', 'like', "%$secteur%");
-        }
+    public function store(Request $request)
+    {
+        $user = auth()->user();
 
-        if ($date) {
-            $opportunities->where('date', 'like', "%$date%");
+        if ($user->userCmc) {
+            return redirect()->route('user-cmcs.index')->with('status', 'Vous avez déjà un profil CMC.');
         }
 
         $opportunities = $opportunities->get();
@@ -49,94 +51,35 @@ class UserCmcController extends Controller
      */
     public function store(Request $request)
     {
-        
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-        ]);
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
 
-        // create a new partenaire use creaete method
-        $partenaire = Partenaire::create([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'address' => $request->address,
-            'city' => $request->city,   
-        ]);
-
-        return redirect()->back()->with('success', 'Your message has been sent successfully!');
+        return view('user-cmcs.show', ['userCmc' => $userCmc]);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(UserCmc $userCmc)
     {
-        //show form to add usercmc
-        return view('add-usercmc');
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
+
+        return view('user-cmcs.edit', ['userCmc' => $userCmc]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function save(string $id)
+    public function update(Request $request, UserCmc $userCmc)
     {
-        // save infos of usercmc in database add validate and create method to save data in database
-        $request->validate([
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
+
+        $userCmc->update($request->validate([
             'post' => 'required|string|max:255',
-        ]); 
-        $usercmc = UserCmc::create([
-            'post' => $request->post,
-        ]);
-        return redirect()->back()->with('success', 'Your message has been sent successfully!');
+        ]));
 
-        
+        return redirect()->route('user-cmcs.index')->with('status', 'Profil CMC mis à jour.');
     }
 
-    // edit function
-        public function edit(string $id)
-        {
-            //show form to edit partner
-            $partenaire = Partenaire::find($id);
-            return view('edit-par', compact('partenaire'));
-        }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(UserCmc $userCmc)
     {
-        // update partner
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
-            'email' => 'required|email|max:255',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:255',
-        ]);
-        $partenaire = Partenaire::find($id);
-        $partenaire->update([
-            'name' => $request->name,
-            'phone' => $request->phone,
-            'email' => $request->email,
-            'address' => $request->address,
-            'city' => $request->city,
-        ]);
+        abort_unless(auth()->id() === $userCmc->user_id, 403);
 
-        return redirect()->back()->with('success', 'Partner updated successfully!');
+        $userCmc->delete();
+
+        return redirect()->route('user-cmcs.index')->with('status', 'Profil CMC supprimé.');
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        $partenaire = Partenaire::find($id);
-        $partenaire->delete();
-        return redirect()->back()->with('success', 'Partner deleted successfully!');
-    }
-
 }
