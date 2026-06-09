@@ -46,7 +46,14 @@
                             </div>
                             <div>
                                 <x-input-label for="type" :value="__('Type de contrat')" />
-                                <x-text-input id="type" name="type" type="text" class="mt-1 block w-full" :value="old('type', $opportunity->type)" placeholder="Ex: Stage, CDD, CDI" />
+                                <select id="type" name="type" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors py-2 px-3">
+                                    <option value="" disabled {{ old('type', $opportunity->type) ? '' : 'selected' }}>{{ __('Sélectionnez un type') }}</option>
+                                    <option value="Stage" {{ old('type', $opportunity->type) === 'Stage' ? 'selected' : '' }}>{{ __('Stage') }}</option>
+                                    <option value="CDD" {{ old('type', $opportunity->type) === 'CDD' ? 'selected' : '' }}>{{ __('CDD') }}</option>
+                                    <option value="CDI" {{ old('type', $opportunity->type) === 'CDI' ? 'selected' : '' }}>{{ __('CDI') }}</option>
+                                    <option value="Alternance" {{ old('type', $opportunity->type) === 'Alternance' ? 'selected' : '' }}>{{ __('Alternance') }}</option>
+                                    <option value="Freelance" {{ old('type', $opportunity->type) === 'Freelance' ? 'selected' : '' }}>{{ __('Freelance') }}</option>
+                                </select>
                                 <x-input-error :messages="$errors->get('type')" class="mt-2" />
                             </div>
                             <div>
@@ -60,7 +67,15 @@
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <x-input-label for="niveau" :value="__('Niveau d\'études')" />
-                                <x-text-input id="niveau" name="niveau" type="text" class="mt-1 block w-full" :value="old('niveau', $opportunity->niveau)" placeholder="Ex: Bac+2, Bac+3, Bac+5" />
+                                <select id="niveau" name="niveau" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors py-2 px-3">
+                                    <option value="" disabled {{ old('niveau', $opportunity->niveau) ? '' : 'selected' }}>{{ __('Sélectionnez un niveau') }}</option>
+                                    <option value="Bac" {{ old('niveau', $opportunity->niveau) === 'Bac' ? 'selected' : '' }}>{{ __('Bac') }}</option>
+                                    <option value="Bac+2" {{ old('niveau', $opportunity->niveau) === 'Bac+2' ? 'selected' : '' }}>{{ __('Bac+2') }}</option>
+                                    <option value="Bac+3" {{ old('niveau', $opportunity->niveau) === 'Bac+3' ? 'selected' : '' }}>{{ __('Bac+3') }}</option>
+                                    <option value="Bac+4" {{ old('niveau', $opportunity->niveau) === 'Bac+4' ? 'selected' : '' }}>{{ __('Bac+4') }}</option>
+                                    <option value="Bac+5" {{ old('niveau', $opportunity->niveau) === 'Bac+5' ? 'selected' : '' }}>{{ __('Bac+5') }}</option>
+                                    <option value="Bac+8" {{ old('niveau', $opportunity->niveau) === 'Bac+8' ? 'selected' : '' }}>{{ __('Bac+8') }}</option>
+                                </select>
                                 <x-input-error :messages="$errors->get('niveau')" class="mt-2" />
                             </div>
                             <div>

@@ -30,7 +30,7 @@ Route::middleware(['auth', 'cmc'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('user-cmcs', UserCmcController::class)->only([
+    Route::resource('user-cmcs', UserCmcController::class)->middleware('cmc')->only([
         'index', 'create', 'store', 'edit', 'update', 'destroy',
     ]);
     Route::resource('opportunities', OpportunityController::class)->only([
