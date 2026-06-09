@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 class Opportunity extends Model
 {
+    use HasFactory;
+    
     protected $fillable = [
         'title',
         'description',
-        'secteur',
-        'type',
+        'secteur_id',
+        'type_id',
         'niveau',
         'profil_requis',
         'ville',

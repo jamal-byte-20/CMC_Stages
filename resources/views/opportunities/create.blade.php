@@ -39,9 +39,14 @@
                         <!-- Secteur, Type & Ville -->
                         <div class="grid sm:grid-cols-3 gap-6">
                             <div>
-                                <x-input-label for="secteur" :value="__('Secteur d\'activité')" />
-                                <x-text-input id="secteur" name="secteur" type="text" class="mt-1 block w-full" :value="old('secteur')" placeholder="Ex: Informatique" />
-                                <x-input-error :messages="$errors->get('secteur')" class="mt-2" />
+                                <x-input-label for="secteur_id" :value="__('Secteur d\'activité')" />                                
+                                <select id="secteur_id" name="secteur_id" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900  text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors" required>
+                                    <option value="" disabled selected>Choisissez un secteur</option>
+                                    @foreach($secteurs as $secteur)
+                                        <option  value="{{ $secteur->id }}" {{ old('secteur_id') == $secteur->id ? 'selected' : '' }}>{{ $secteur->title }}</option>
+                                    @endforeach
+                                </select>
+                                <x-input-error :messages="$errors->get('secteur_id')" class="mt-2" />
                             </div>
                             <div>
                                 <x-input-label for="type" :value="__('Type de contrat')" />
@@ -57,12 +62,13 @@
                             </div>
                             <div>
                                 <x-input-label for="ville" :value="__('Ville')" />
-                                <x-text-input id="ville" name="ville" type="text" class="mt-1 block w-full" :value="old('ville')" placeholder="Ex: Casablanca" />
+                                <x-text-input id="ville" name="ville" type="text" class="mt-1 block w-full" :value="old('ville')" placeholder="Ex: Paris" />
                                 <x-input-error :messages="$errors->get('ville')" class="mt-2" />
                             </div>
-                        </div>
 
-                        <!-- Niveau & Profil requis -->
+                    
+                            
+                            <!-- Niveau & Profil requis -->
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <x-input-label for="niveau" :value="__('Niveau d\'études')" />

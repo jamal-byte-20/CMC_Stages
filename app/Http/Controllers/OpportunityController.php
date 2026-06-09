@@ -16,6 +16,8 @@ class OpportunityController extends Controller
             'description' => 'required|string',
             'secteur' => 'nullable|string|max:255',
             'type' => 'nullable|string|max:255',
+            'secteur_id' => 'nullable|exists:secteurs,id',
+            'type_id' => 'nullable|exists:types,id',
             'niveau' => 'nullable|string|max:255',
             'profil_requis' => 'nullable|string|max:1000',
             'ville' => 'nullable|string|max:255',
@@ -31,11 +33,14 @@ class OpportunityController extends Controller
         if ($request->filled('title')) {
             $query->where('title', 'like', '%' . $request->input('title') . '%');
         }
+        
+        // i only have the secteur and type id but i need their name to compare with the input
+
         if ($request->filled('secteur')) {
-            $query->where('secteur', 'like', '%' . $request->input('secteur') . '%');
+            $query->whereHas('secteur', fn($q) => $q->where('title', 'like', '%' . $request->input('secteur') . '%'));
         }
         if ($request->filled('type')) {
-            $query->where('type', 'like', '%' . $request->input('type') . '%');
+            $query->whereHas('type', fn($q) => $q->where('title', 'like', '%' . $request->input('type') . '%'));
         }
 
         return view('opportunities.index', [
@@ -49,7 +54,10 @@ class OpportunityController extends Controller
     {
         abort_unless(auth()->user()->isPartenaire(), 403);
 
-        return view('opportunities.create');
+        $secteurs = Secteur::all();
+        $types = Type::all();
+
+        return view('opportunities.create', compact('secteurs', 'types'));
     }
 
     public function store(Request $request)
@@ -67,7 +75,10 @@ class OpportunityController extends Controller
     {
         abort_unless(auth()->user()->partenaire && auth()->user()->partenaire->id === $opportunity->partenaire_id, 403);
 
-        return view('opportunities.edit', ['opportunity' => $opportunity]);
+        $secteurs = Secteur::all();
+        $types = Type::all();
+
+        return view('opportunities.edit', compact('opportunity', 'secteurs', 'types'));
     }
 
     public function update(Request $request, Opportunity $opportunity)

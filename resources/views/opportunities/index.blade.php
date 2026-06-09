@@ -92,12 +92,12 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-300">
-                                            {{ $opportunity->secteur ?? '—' }}
+                                            {{ $opportunity->secteur->title ?? '—' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                                             @if($opportunity->type)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-indigo-50 dark:bg-indigo-950/30 text-indigo-700 dark:text-indigo-300">
-                                                    {{ $opportunity->type }}
+                                                    {{ $opportunity->type->title }}
                                                 </span>
                                             @else
                                                 <span class="text-slate-400">—</span>

@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 
 class UserCmcController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         return view('user-cmcs.index', [
@@ -31,14 +34,20 @@ class UserCmcController extends Controller
             return redirect()->route('user-cmcs.index')->with('status', 'Vous avez déjà un profil CMC.');
         }
 
-        $user->userCmc()->create($request->validate([
-            'post' => 'required|string|max:255',
-        ]));
-
-        return redirect()->route('user-cmcs.index')->with('status', 'Profil CMC créé.');
+        $opportunities = $opportunities->get();
+        return view('all', compact('opportunities'));
     }
-
-    public function show(UserCmc $userCmc)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return view('add-par');
+    }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
         abort_unless(auth()->id() === $userCmc->user_id, 403);
 
