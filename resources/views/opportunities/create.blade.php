@@ -49,14 +49,16 @@
                                 <x-input-error :messages="$errors->get('secteur_id')" class="mt-2" />
                             </div>
                             <div>
-                                <x-input-label for="type_id" :value="__('Type d\'opportunité')" />
-                                <select id="type_id" name="type_id" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors" required>
-                                    <option value="" disabled selected>Choisissez un type</option>
-                                    @foreach($types as $type)
-                                        <option value="{{ $type->id }}" {{ old('type_id') == $type->id ? 'selected' : '' }}>{{ $type->title }}</option>
-                                    @endforeach
+                                <x-input-label for="type" :value="__('Type de contrat')" />
+                                <select id="type" name="type" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors py-2 px-3">
+                                    <option value="" disabled {{ old('type') ? '' : 'selected' }}>{{ __('Sélectionnez un type') }}</option>
+                                    <option value="Stage" {{ old('type') === 'Stage' ? 'selected' : '' }}>{{ __('Stage') }}</option>
+                                    <option value="CDD" {{ old('type') === 'CDD' ? 'selected' : '' }}>{{ __('CDD') }}</option>
+                                    <option value="CDI" {{ old('type') === 'CDI' ? 'selected' : '' }}>{{ __('CDI') }}</option>
+                                    <option value="Alternance" {{ old('type') === 'Alternance' ? 'selected' : '' }}>{{ __('Alternance') }}</option>
+                                    <option value="Freelance" {{ old('type') === 'Freelance' ? 'selected' : '' }}>{{ __('Freelance') }}</option>
                                 </select>
-                                <x-input-error :messages="$errors->get('type_id')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('type')" class="mt-2" />
                             </div>
                             <div>
                                 <x-input-label for="ville" :value="__('Ville')" />
@@ -70,7 +72,15 @@
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <x-input-label for="niveau" :value="__('Niveau d\'études')" />
-                                <x-text-input id="niveau" name="niveau" type="text" class="mt-1 block w-full" :value="old('niveau')" placeholder="Ex: Bac+2, Bac+3, Bac+5" />
+                                <select id="niveau" name="niveau" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors py-2 px-3">
+                                    <option value="" disabled {{ old('niveau') ? '' : 'selected' }}>{{ __('Sélectionnez un niveau') }}</option>
+                                    <option value="Bac" {{ old('niveau') === 'Bac' ? 'selected' : '' }}>{{ __('Bac') }}</option>
+                                    <option value="Bac+2" {{ old('niveau') === 'Bac+2' ? 'selected' : '' }}>{{ __('Bac+2') }}</option>
+                                    <option value="Bac+3" {{ old('niveau') === 'Bac+3' ? 'selected' : '' }}>{{ __('Bac+3') }}</option>
+                                    <option value="Bac+4" {{ old('niveau') === 'Bac+4' ? 'selected' : '' }}>{{ __('Bac+4') }}</option>
+                                    <option value="Bac+5" {{ old('niveau') === 'Bac+5' ? 'selected' : '' }}>{{ __('Bac+5') }}</option>
+                                    <option value="Bac+8" {{ old('niveau') === 'Bac+8' ? 'selected' : '' }}>{{ __('Bac+8') }}</option>
+                                </select>
                                 <x-input-error :messages="$errors->get('niveau')" class="mt-2" />
                             </div>
                             <div>

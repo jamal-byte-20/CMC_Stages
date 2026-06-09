@@ -12,10 +12,8 @@ class UserCmcController extends Controller
      */
     public function index()
     {
-        $userCmc = auth()->user()->userCmc;
-
         return view('user-cmcs.index', [
-            'userCmcs' => $userCmc ? collect([$userCmc]) : collect(),
+            'userCmcs' => UserCmc::with('user')->latest()->get(),
         ]);
     }
 

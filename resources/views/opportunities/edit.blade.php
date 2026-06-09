@@ -38,39 +38,44 @@
                         </div>
 
                         <!-- Secteur, Type & Ville -->
-                        {{-- like create form --}}
-                            <div class="grid sm:grid-cols-3 gap-6">
-                                <div>
-                                    <x-input-label for="secteur_id" :value="__('Secteur d\'activité')" />                                
-                                    <select id="secteur_id" name="secteur_id" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900  text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors" required>
-                                        <option value="" disabled>Choisissez un secteur</option>
-                                        @foreach($secteurs as $secteur)
-                                            <option value="{{ $secteur->id }}" {{ old('secteur_id', $opportunity->secteur_id) == $secteur->id ? 'selected' : '' }}>{{ $secteur->title }}</option>
-                                        @endforeach
-                                    </select>
-                                    <x-input-error :messages="$errors->get('secteur_id')" class="mt-2" />
-                                </div>
-                                <div>
-                                    <x-input-label for="type_id" :value="__('Type d\'opportunité')" />
-                                    <select id="type_id" name="type_id" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors" required>
-                                        <option value="" disabled>Choisissez un type</option>
-                                        @foreach($types as $type)
-                                            <option value="{{ $type->id }}" {{ old('type_id', $opportunity->type_id) == $type->id ? 'selected' : '' }}>{{ $type->title }}</option>
-                                        @endforeach
-                                    </select>
-                                    <x-input-error :messages="$errors->get('type_id')" class="mt-2" />
-                                </div>
-                                <div>
-                                    <x-input-label for="ville" :value="__('Ville')" />
-                                    <x-text-input id="ville" name="ville" type="text" class="mt-1 block w-full" :value="old('ville', $opportunity->ville)" placeholder="Ex: Paris" />
-                                    <x-input-error :messages="$errors->get('ville')" class="mt-2" />
-                                </div>
+                        <div class="grid sm:grid-cols-3 gap-6">
+                            <div>
+                                <x-input-label for="secteur" :value="__('Secteur d\'activité')" />
+                                <x-text-input id="secteur" name="secteur" type="text" class="mt-1 block w-full" :value="old('secteur', $opportunity->secteur)" placeholder="Ex: Informatique" />
+                                <x-input-error :messages="$errors->get('secteur')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="type" :value="__('Type de contrat')" />
+                                <select id="type" name="type" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors py-2 px-3">
+                                    <option value="" disabled {{ old('type', $opportunity->type) ? '' : 'selected' }}>{{ __('Sélectionnez un type') }}</option>
+                                    <option value="Stage" {{ old('type', $opportunity->type) === 'Stage' ? 'selected' : '' }}>{{ __('Stage') }}</option>
+                                    <option value="CDD" {{ old('type', $opportunity->type) === 'CDD' ? 'selected' : '' }}>{{ __('CDD') }}</option>
+                                    <option value="CDI" {{ old('type', $opportunity->type) === 'CDI' ? 'selected' : '' }}>{{ __('CDI') }}</option>
+                                    <option value="Alternance" {{ old('type', $opportunity->type) === 'Alternance' ? 'selected' : '' }}>{{ __('Alternance') }}</option>
+                                    <option value="Freelance" {{ old('type', $opportunity->type) === 'Freelance' ? 'selected' : '' }}>{{ __('Freelance') }}</option>
+                                </select>
+                                <x-input-error :messages="$errors->get('type')" class="mt-2" />
+                            </div>
+                            <div>
+                                <x-input-label for="ville" :value="__('Ville')" />
+                                <x-text-input id="ville" name="ville" type="text" class="mt-1 block w-full" :value="old('ville', $opportunity->ville)" placeholder="Ex: Casablanca" />
+                                <x-input-error :messages="$errors->get('ville')" class="mt-2" />
+                            </div>
+                        </div>
 
                         <!-- Niveau & Profil requis -->
                         <div class="grid sm:grid-cols-2 gap-6">
                             <div>
                                 <x-input-label for="niveau" :value="__('Niveau d\'études')" />
-                                <x-text-input id="niveau" name="niveau" type="text" class="mt-1 block w-full" :value="old('niveau', $opportunity->niveau)" placeholder="Ex: Bac+2, Bac+3, Bac+5" />
+                                <select id="niveau" name="niveau" class="mt-1 block w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 focus:border-indigo-500 focus:ring-indigo-500 transition-colors py-2 px-3">
+                                    <option value="" disabled {{ old('niveau', $opportunity->niveau) ? '' : 'selected' }}>{{ __('Sélectionnez un niveau') }}</option>
+                                    <option value="Bac" {{ old('niveau', $opportunity->niveau) === 'Bac' ? 'selected' : '' }}>{{ __('Bac') }}</option>
+                                    <option value="Bac+2" {{ old('niveau', $opportunity->niveau) === 'Bac+2' ? 'selected' : '' }}>{{ __('Bac+2') }}</option>
+                                    <option value="Bac+3" {{ old('niveau', $opportunity->niveau) === 'Bac+3' ? 'selected' : '' }}>{{ __('Bac+3') }}</option>
+                                    <option value="Bac+4" {{ old('niveau', $opportunity->niveau) === 'Bac+4' ? 'selected' : '' }}>{{ __('Bac+4') }}</option>
+                                    <option value="Bac+5" {{ old('niveau', $opportunity->niveau) === 'Bac+5' ? 'selected' : '' }}>{{ __('Bac+5') }}</option>
+                                    <option value="Bac+8" {{ old('niveau', $opportunity->niveau) === 'Bac+8' ? 'selected' : '' }}>{{ __('Bac+8') }}</option>
+                                </select>
                                 <x-input-error :messages="$errors->get('niveau')" class="mt-2" />
                             </div>
                             <div>
